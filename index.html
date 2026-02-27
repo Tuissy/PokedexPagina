@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pokédex</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">Poké<span>DEX</span></a>
+  <div class="navbar-enlaces">
+    <a href="index.html" class="navbar-enlace activo">Pokédex</a>
+    <a href="acerca.html" class="navbar-enlace">Acerca de</a>
+    <a href="como-usar.html" class="navbar-enlace">Cómo usar</a>
+  </div>
+</nav>
+
+<div class="contenedor" style="padding-top: 100px;">
+
+  <header>
+    <div class="logo">Poké<span>DEX</span></div>
+    <p>Busca cualquier Pokémon por su nombre o número</p>
+  </header>
+
+  <div class="contenedor-busqueda">
+    <input type="text" id="entradaBusqueda" placeholder="Ej: pikachu, charizard, 25..." autocomplete="off"/>
+    <button id="botonBuscar">Buscar</button>
+  </div>
+
+  <div id="mensaje"></div>
+
+  <div class="cargador" id="cargador">
+    <div class="pelota-cargador"></div>
+    <div class="pelota-cargador"></div>
+    <div class="pelota-cargador"></div>
+  </div>
+
+  <div id="tarjeta">
+    <div class="tarjeta">
+      <div class="tarjeta-superior" id="tarjetaSuperior">
+        <div class="numero-pokemon" id="numeroPokemon">#000</div>
+        <div class="contenedor-imagen">
+          <img id="imagenPokemon" src="" alt=""/>
+        </div>
+        <div id="nombrePokemon"></div>
+        <div class="tipos" id="tiposPokemon"></div>
+      </div>
+
+      <div class="tarjeta-inferior">
+        <div>
+          <div class="titulo-seccion">Info</div>
+          <div class="cuadricula-info">
+            <div class="elemento-info">
+              <div class="etiqueta-info">Altura</div>
+              <div class="valor-info" id="altura">—</div>
+            </div>
+            <div class="elemento-info">
+              <div class="etiqueta-info">Peso</div>
+              <div class="valor-info" id="peso">—</div>
+            </div>
+            <div class="elemento-info habilidades-completo">
+              <div class="etiqueta-info">Habilidades</div>
+              <div class="lista-habilidades" id="listaHabilidades"></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="titulo-seccion">Stats base</div>
+          <div class="lista-estadisticas" id="listaEstadisticas"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sugerencias" id="sugerencias">
+    <p>Prueba con alguno de estos:</p>
+    <div class="contenedor-sugerencias">
+      <button class="boton-sugerencia" data-nombre="pikachu">pikachu</button>
+      <button class="boton-sugerencia" data-nombre="charizard">charizard</button>
+      <button class="boton-sugerencia" data-nombre="mewtwo">mewtwo</button>
+      <button class="boton-sugerencia" data-nombre="gengar">gengar</button>
+      <button class="boton-sugerencia" data-nombre="eevee">eevee</button>
+      <button class="boton-sugerencia" data-nombre="snorlax">snorlax</button>
+    </div>
+  </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
