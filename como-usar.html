@@ -9,6 +9,8 @@
 </head>
 <body>
 
+<div id="overlay" onclick="cerrarTodo()"></div>
+
 <nav class="navbar">
   <a href="index.html" class="navbar-logo">Poké<span>DEX</span></a>
   <div class="navbar-enlaces">
@@ -16,7 +18,74 @@
     <a href="acerca.html" class="navbar-enlace">Acerca de</a>
     <a href="como-usar.html" class="navbar-enlace activo">Cómo usar</a>
   </div>
+  <div class="navbar-auth">
+    <span id="userInfo" style="display:none;"></span>
+    <button id="btnPanel" style="display:none;" onclick="abrirPanel()">☰ Mi colección</button>
+    <button id="btnAuth" onclick="abrirModalAuth()">Iniciar sesión</button>
+  </div>
+  <button class="navbar-hamburger" id="btnHamburger" onclick="toggleDrawer()" aria-label="Menú">☰</button>
 </nav>
+
+<div class="navbar-drawer" id="navDrawer">
+  <a href="index.html" class="navbar-enlace" onclick="cerrarDrawer()">Pokédex</a>
+  <a href="acerca.html" class="navbar-enlace" onclick="cerrarDrawer()">Acerca de</a>
+  <a href="como-usar.html" class="navbar-enlace activo" onclick="cerrarDrawer()">Cómo usar</a>
+</div>
+
+<!-- Panel lateral -->
+<div id="panelLateral">
+  <div class="panel-header">
+    <span class="panel-titulo">Mi Colección</span>
+    <button class="panel-cerrar" onclick="cerrarPanel()">✕</button>
+  </div>
+  <div class="panel-tabs">
+    <button class="tab-panel activo" data-tab="favoritos" onclick="cambiarTabPanel('favoritos')">♥ Favoritos</button>
+    <button class="tab-panel" data-tab="historial" onclick="cambiarTabPanel('historial')">🕐 Recientes</button>
+    <button class="tab-panel" data-tab="equipos" onclick="cambiarTabPanel('equipos')">⚔ Equipos</button>
+  </div>
+  <div id="contenidoPanel"></div>
+</div>
+
+<!-- Modal auth -->
+<div id="modalAuth">
+  <div class="modal-caja">
+    <button class="modal-cerrar" onclick="cerrarModalAuth()">✕</button>
+    <div class="modal-logo">Poké<span>DEX</span></div>
+    <div class="tabs-auth">
+      <button class="tab-auth activo" data-tab="login" onclick="mostrarTabAuth('login')">Iniciar sesión</button>
+      <button class="tab-auth" data-tab="register" onclick="mostrarTabAuth('register')">Registrarse</button>
+    </div>
+    <p id="errorAuth" class="auth-error"></p>
+    <div id="formLogin">
+      <div class="campo-auth">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="trainer@poke.com" autocomplete="email"/>
+      </div>
+      <div class="campo-auth">
+        <label>Contraseña</label>
+        <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+               onkeydown="if(event.key==='Enter') handleLogin()"/>
+      </div>
+      <button class="btn-auth-submit" onclick="handleLogin()">Entrar</button>
+    </div>
+    <div id="formRegister" style="display:none;">
+      <div class="campo-auth">
+        <label>Nombre</label>
+        <input type="text" id="regNombre" placeholder="Ash Ketchum" autocomplete="name"/>
+      </div>
+      <div class="campo-auth">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="ash@poke.com" autocomplete="email"/>
+      </div>
+      <div class="campo-auth">
+        <label>Contraseña</label>
+        <input type="password" id="regPass" placeholder="••••••••" autocomplete="new-password"
+               onkeydown="if(event.key==='Enter') handleRegister()"/>
+      </div>
+      <button class="btn-auth-submit" onclick="handleRegister()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
 
 <div class="pagina-interior">
 
@@ -92,5 +161,15 @@
 
 </div>
 
+<script src="app.js"></script>
+<script>
+  function toggleDrawer() {
+    document.getElementById('navDrawer').classList.toggle('abierto');
+  }
+  function cerrarDrawer() {
+    document.getElementById('navDrawer').classList.remove('abierto');
+  }
+  function cerrarTodo() { cerrarDrawer(); cerrarPanel(); }
+</script>
 </body>
 </html>

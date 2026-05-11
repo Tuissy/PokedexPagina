@@ -9,21 +9,33 @@
 </head>
 <body>
 
-<div id="overlay" onclick="cerrarPanel()"></div>
+<div id="overlay" onclick="cerrarTodo()"></div>
 
 <nav class="navbar">
   <a href="index.html" class="navbar-logo">Poké<span>DEX</span></a>
+
   <div class="navbar-enlaces">
     <a href="index.html" class="navbar-enlace activo">Pokédex</a>
     <a href="acerca.html" class="navbar-enlace">Acerca de</a>
     <a href="como-usar.html" class="navbar-enlace">Cómo usar</a>
   </div>
+
   <div class="navbar-auth">
     <span id="userInfo" style="display:none;"></span>
     <button id="btnPanel" style="display:none;" onclick="abrirPanel()">☰ Mi colección</button>
     <button id="btnAuth" onclick="abrirModalAuth()">Iniciar sesión</button>
   </div>
+
+  <!-- Hamburger para mobile -->
+  <button class="navbar-hamburger" id="btnHamburger" onclick="toggleDrawer()" aria-label="Menú">☰</button>
 </nav>
+
+<!-- Drawer de navegación móvil -->
+<div class="navbar-drawer" id="navDrawer">
+  <a href="index.html" class="navbar-enlace activo" onclick="cerrarDrawer()">Pokédex</a>
+  <a href="acerca.html" class="navbar-enlace" onclick="cerrarDrawer()">Acerca de</a>
+  <a href="como-usar.html" class="navbar-enlace" onclick="cerrarDrawer()">Cómo usar</a>
+</div>
 
 <!-- Panel lateral -->
 <div id="panelLateral">
@@ -81,7 +93,7 @@
 </div>
 
 <!-- Contenido principal -->
-<div class="contenedor" style="padding-top: 100px;">
+<div class="contenedor">
   <header>
     <div class="logo">Poké<span>DEX</span></div>
     <p>Busca cualquier Pokémon por su nombre o número</p>
@@ -153,5 +165,18 @@
 </div>
 
 <script src="app.js"></script>
+<script>
+  function toggleDrawer() {
+    document.getElementById('navDrawer').classList.toggle('abierto');
+  }
+  function cerrarDrawer() {
+    document.getElementById('navDrawer').classList.remove('abierto');
+  }
+  // Override cerrarTodo so overlay closes drawer OR panel
+  function cerrarTodo() {
+    cerrarDrawer();
+    cerrarPanel();
+  }
+</script>
 </body>
 </html>
