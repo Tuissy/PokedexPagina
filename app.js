@@ -1,3 +1,11 @@
+// ============================================================
+//  Pokédex — app.js
+//  Fuente de datos: backend propio en Render (proxy de PokéAPI)
+//  Fallback: PokéAPI directo si el backend no responde
+// ============================================================
+
+const BACKEND_URL = "https://pokedex-back-orrs.onrender.com";
+
 // Colores por tipo
 const COLORES_TIPO = {
   fire:     "#FF6B35",
@@ -20,7 +28,7 @@ const COLORES_TIPO = {
   steel:    "#748CAB",
 };
 
-// Nombres de estadisticas 
+// Nombres de estadísticas
 const NOMBRES_ESTADISTICA = {
   hp:               "HP",
   attack:           "Ataque",
@@ -30,15 +38,16 @@ const NOMBRES_ESTADISTICA = {
   speed:            "Velocidad",
 };
 
-// Referencias
+// Referencias DOM
 const entradaBusqueda = document.getElementById("entradaBusqueda");
 const botonBuscar     = document.getElementById("botonBuscar");
 const mensaje         = document.getElementById("mensaje");
 const cargador        = document.getElementById("cargador");
 const tarjeta         = document.getElementById("tarjeta");
 const sugerencias     = document.getElementById("sugerencias");
+const fuenteIndicador = document.getElementById("fuenteIndicador");
 
-// Eventos 
+// Eventos
 botonBuscar.addEventListener("click", () => buscarPokemon(entradaBusqueda.value.trim()));
 
 entradaBusqueda.addEventListener("keydown", (evento) => {
@@ -53,7 +62,8 @@ document.querySelectorAll(".boton-sugerencia").forEach((boton) => {
   });
 });
 
-// Busqueda 
+// ─── Función principal de búsqueda ───────────────────────────
+
 async function buscarPokemon(consulta) {
   if (!consulta) {
     mostrarMensaje("Ingresa el nombre o número de un Pokémon", "error");
@@ -64,12 +74,21 @@ async function buscarPokemon(consulta) {
   tarjeta.classList.remove("visible");
   cargador.classList.add("activo");
   sugerencias.style.display = "none";
+  if (fuenteIndicador) fuenteIndicador.style.display = "none";
 
   try {
-    const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${consulta.toLowerCase()}`);
-    if (!respuesta.ok) throw new Error("no encontrado");
-    const datos = await respuesta.json();
+    const { datos, fuente } = await obtenerDatosPokemon(consulta.toLowerCase());
     renderizarTarjeta(datos);
+
+    // Mostrar indicador de fuente
+    if (fuenteIndicador) {
+      fuenteIndicador.textContent = fuente === "backend"
+        ? "✓ datos vía servidor propio"
+        : "✓ datos vía PokéAPI (fallback)";
+      fuenteIndicador.className = fuente === "backend" ? "fuente-backend" : "fuente-fallback";
+      fuenteIndicador.style.display = "block";
+    }
+
   } catch {
     mostrarMensaje(`No se encontró "${consulta}". Revisa el nombre o número.`, "error");
     sugerencias.style.display = "block";
@@ -78,7 +97,39 @@ async function buscarPokemon(consulta) {
   }
 }
 
-// Renderizado 
+// ─── Fetch con fallback ───────────────────────────────────────
+
+async function obtenerDatosPokemon(consulta) {
+  // 1. Intentar el backend propio
+  try {
+    const respuesta = await fetchConTimeout(
+      `${BACKEND_URL}/pokemon/${consulta}`,
+      5000          // 5 s — tiempo razonable para cold start de Render
+    );
+    if (respuesta.ok) {
+      const datos = await respuesta.json();
+      return { datos, fuente: "backend" };
+    }
+  } catch {
+    // El backend no respondió a tiempo → caer al fallback
+  }
+
+  // 2. Fallback: PokéAPI directo
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${consulta}`);
+  if (!respuesta.ok) throw new Error("no encontrado");
+  const datos = await respuesta.json();
+  return { datos, fuente: "pokeapi" };
+}
+
+// Fetch con timeout usando AbortController
+function fetchConTimeout(url, ms) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(id));
+}
+
+// ─── Renderizado de tarjeta ───────────────────────────────────
+
 function renderizarTarjeta(pokemon) {
   // Número y nombre
   document.getElementById("numeroPokemon").textContent =
@@ -123,7 +174,7 @@ function renderizarTarjeta(pokemon) {
     contenedorHabilidades.appendChild(etiqueta);
   });
 
-  // Estadisticas
+  // Estadísticas
   const contenedorEstadisticas = document.getElementById("listaEstadisticas");
   contenedorEstadisticas.innerHTML = "";
   pokemon.stats.forEach((estadistica) => {
@@ -143,7 +194,8 @@ function renderizarTarjeta(pokemon) {
   tarjeta.classList.add("visible");
 }
 
-// Mostrar mensaje
+// ─── Mensajes de error ────────────────────────────────────────
+
 function mostrarMensaje(texto, tipo = "") {
   mensaje.textContent = texto;
   mensaje.className   = tipo;
