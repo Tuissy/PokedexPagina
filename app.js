@@ -168,8 +168,6 @@ function actualizarUI() {
   if (pokemonActual) actualizarBotonesAccion(pokemonActual);
 }
 
-  if (pokemonActual) actualizarBotonesAccion(pokemonActual);
-}
 
 //  Modal auth 
 function abrirModalAuth() {
