@@ -467,4 +467,9 @@ async function actualizarBotonesAccion(p) {
   `;
 }
 
-actualizarUI();
+// Inicializar UI tras cargar el DOM
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", actualizarUI);
+} else {
+  actualizarUI();
+}

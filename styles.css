@@ -170,6 +170,8 @@ body::before {
   padding: 12px 20px 16px;
   flex-direction: column;
   gap: 6px;
+  max-height: calc(100dvh - var(--navbar-h));
+  overflow-y: auto;
   animation: drawerDown 0.22s ease both;
 }
 .navbar-drawer.abierto { display: flex; }
