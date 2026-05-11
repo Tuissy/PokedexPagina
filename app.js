@@ -142,6 +142,7 @@ function actualizarUI() {
   const btnAuth  = document.getElementById("btnAuth");
   const btnPanel = document.getElementById("btnPanel");
   const userInfo = document.getElementById("userInfo");
+  const drawerAuth = document.getElementById("drawerAuth");
 
   if (session) {
     btnAuth.textContent = "Salir";
@@ -149,12 +150,23 @@ function actualizarUI() {
     btnPanel.style.display = "flex";
     userInfo.textContent = session.nombre || session.email;
     userInfo.style.display = "block";
+    if (drawerAuth) drawerAuth.innerHTML = `
+      <span class="drawer-user">${session.nombre || session.email}</span>
+      <button class="drawer-btn" onclick="cerrarDrawer();abrirPanel();">☰ Mi colección</button>
+      <button class="drawer-btn drawer-btn-danger" onclick="cerrarSesion();">Salir</button>
+    `;
   } else {
     btnAuth.textContent = "Iniciar sesión";
     btnAuth.onclick = abrirModalAuth;
     btnPanel.style.display = "none";
     userInfo.style.display = "none";
+    if (drawerAuth) drawerAuth.innerHTML = `
+      <button class="drawer-btn drawer-btn-primary" onclick="cerrarDrawer();abrirModalAuth();">Iniciar sesión</button>
+    `;
   }
+
+  if (pokemonActual) actualizarBotonesAccion(pokemonActual);
+}
 
   if (pokemonActual) actualizarBotonesAccion(pokemonActual);
 }
