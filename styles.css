@@ -63,6 +63,7 @@ body::before {
   color: var(--acento);
   text-shadow: 2px 2px 0 #8b0000;
   text-decoration: none;
+  flex: 1;          /* same weight as navbar-auth so center stays centered */
   flex-shrink: 0;
 }
 .navbar-logo span { color: var(--acento2); }
@@ -70,8 +71,8 @@ body::before {
 .navbar-enlaces {
   display: flex;
   gap: 6px;
-  flex: 1;
   justify-content: center;
+  flex-shrink: 0;   /* don't grow/shrink — always sits in the true center */
 }
 
 .navbar-enlace {
@@ -91,7 +92,9 @@ body::before {
 .navbar-auth {
   display: flex;
   align-items: center;
+  justify-content: flex-end;  /* push content to the right */
   gap: 10px;
+  flex: 1;          /* mirrors navbar-logo so center is always symmetric */
   flex-shrink: 0;
 }
 
